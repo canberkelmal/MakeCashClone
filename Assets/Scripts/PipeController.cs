@@ -14,14 +14,14 @@ public class PipeController : MonoBehaviour
         coinObj = gameManager.coinObj;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if(gameManager.isMining && !mining)
         {
             mining = true;
             GetComponent<Animator>().SetTrigger("SlideCoin");
         }
-        if (!gameManager.isMining && mining)
+        else if (!gameManager.isMining && mining)
         {
             mining = false;
             GetComponent<Animator>().SetTrigger("StopCoin");
@@ -30,6 +30,10 @@ public class PipeController : MonoBehaviour
 
     public void InstantiateCoin()
     {
-        Instantiate(coinObj, transform.Find("Mount").position, Quaternion.EulerAngles(90, 0, 0));
+        Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 0));
+    }
+    public void IncreseSpeed(float amount)
+    {
+        GetComponent<Animator>().speed += amount;
     }
 }

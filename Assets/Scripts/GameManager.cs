@@ -2,24 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject cardObj;
     public GameObject coinObj;
+    public Transform pipes;
     public Image heatBarFill;
     public float heatSensivity;
+    public float addSpeedAmount = 0.1f;
 
     [NonSerialized]
     public bool isMining = false;
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-
-    }
-
+    private int pipeCount = 1;
     // Update is called once per frame
     void Update()
     {
@@ -30,13 +28,16 @@ public class GameManager : MonoBehaviour
 
     private void InputController()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            StartMining();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            StopMining();
+            if (Input.GetMouseButtonDown(0))
+            {
+                StartMining();
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                StopMining();
+            }
         }
     }
 
@@ -76,6 +77,32 @@ public class GameManager : MonoBehaviour
         else
         {
             CancelInvoke("DecreaseHeatBar");
+        }
+    }
+
+    public void IncreaseSpeed(bool sign)
+    {
+        float add = sign ? addSpeedAmount : -addSpeedAmount;
+        for(int i = 0; i < pipes.childCount; i++)
+        {
+            pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(add);
+        }
+    }
+
+    public void AddPipe()
+    {
+        if(pipeCount < pipes.childCount)
+        {
+            pipes.GetChild(pipeCount).gameObject.SetActive(true);
+            pipeCount++;
+        }
+        else
+        {
+            for(int i = 1; i < pipes.childCount; i++)
+            {
+                pipes.GetChild(i).gameObject.SetActive(false);
+            }
+            pipeCount = 1;
         }
     }
 }
