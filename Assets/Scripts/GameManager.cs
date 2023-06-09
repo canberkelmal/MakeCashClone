@@ -7,8 +7,12 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GameObject cardObj;
+    public GameObject coinObj;
     public Image heatBarFill;
     public float heatSensivity;
+
+    [NonSerialized]
+    public bool isMining = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -40,6 +44,7 @@ public class GameManager : MonoBehaviour
     {
         CancelInvoke("DecreaseHeatBar");
         InvokeRepeating("IncreaseHeatBar", 0, Time.deltaTime);
+        isMining = true;
         cardObj.GetComponent<CardController>().SetFanSpeed(true);
     }
 
@@ -47,6 +52,7 @@ public class GameManager : MonoBehaviour
     {
         CancelInvoke("IncreaseHeatBar");
         InvokeRepeating("DecreaseHeatBar", 0, Time.deltaTime);
+        isMining = false;
         cardObj.GetComponent<CardController>().SetFanSpeed(false);
     }
 
