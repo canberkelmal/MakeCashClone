@@ -15,7 +15,6 @@ public class PipeController : MonoBehaviour
     private Text multiplierTx;
     private bool mining = false;
 
-    [NonSerialized]
     public int multiplier = 1;
 
 

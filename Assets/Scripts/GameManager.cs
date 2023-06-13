@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public Color heatCardColor;
     public Transform pipes;
     public Image heatBarFill;
+    public Text moneyTx;
     public float moneyPerCoin = 1f;
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
@@ -31,6 +32,11 @@ public class GameManager : MonoBehaviour
     {
         defCardColor = card.GetComponent<Renderer>().material.color;
         moneyCount = PlayerPrefs.GetFloat("moneyCount", 0);
+    }
+
+    private void Start()
+    {
+        IncreaseMoneyCount(0);
     }
     // Update is called once per frame
     void Update()
@@ -60,6 +66,7 @@ public class GameManager : MonoBehaviour
         float income = moneyPerCoin * multiplier;
         moneyCount += income;
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
+        moneyTx.text = "$" + moneyCount.ToString();
         Debug.Log("Money: " + moneyCount);
     }
 
