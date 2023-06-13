@@ -8,9 +8,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GameObject cardObj;
+    public GameObject card;
     public GameObject coinObj;
+    public GameObject heatWarningUI;
+    public Color heatCardColor;
     public Transform pipes;
     public Image heatBarFill;
+    public float moneyPerCoin = 1f;
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
 
@@ -18,6 +22,16 @@ public class GameManager : MonoBehaviour
     public bool isMining = false;
 
     private int pipeCount = 1;
+    private float moneyCount = 0f;
+    private bool overHeat = false;
+    private Color defCardColor;
+
+
+    private void Awake()
+    {
+        defCardColor = card.GetComponent<Renderer>().material.color;
+        moneyCount = PlayerPrefs.GetFloat("moneyCount", 0);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -30,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !overHeat)
             {
                 StartMining();
             }
@@ -41,10 +55,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void IncreaseMoneyCount(int multiplier)
+    {
+        float income = moneyPerCoin * multiplier;
+        moneyCount += income;
+        PlayerPrefs.SetFloat("moneyCount", moneyCount);
+        Debug.Log("Money: " + moneyCount);
+    }
+
     private void StartMining()
     {
         CancelInvoke("DecreaseHeatBar");
-        InvokeRepeating("IncreaseHeatBar", 0, Time.deltaTime);
+        InvokeRepeating("IncreaseHeatBar", 0, Time.fixedDeltaTime);
         isMining = true;
         cardObj.GetComponent<CardController>().SetFanSpeed(true);
     }
@@ -52,32 +74,46 @@ public class GameManager : MonoBehaviour
     private void StopMining()
     {
         CancelInvoke("IncreaseHeatBar");
-        InvokeRepeating("DecreaseHeatBar", 0, Time.deltaTime);
+        InvokeRepeating("DecreaseHeatBar", 0, Time.fixedDeltaTime);
         isMining = false;
         cardObj.GetComponent<CardController>().SetFanSpeed(false);
     }
 
     private void IncreaseHeatBar()
     {
-        if(heatBarFill.fillAmount <= 100)
+        if(heatBarFill.fillAmount < 1)
         {
             heatBarFill.fillAmount += heatSensivity * Time.deltaTime;
         }
         else
         {
-            CancelInvoke("IncreaseHeatBar");
+            overHeat = true;
+            StopMining();
+            Debug.Log("overheat fillAmount: " + heatBarFill.fillAmount);
         }
+
+        ChangeCardColor(heatBarFill.fillAmount);
     }
     private void DecreaseHeatBar()
     {
-        if (heatBarFill.fillAmount >= 0)
+        if (heatBarFill.fillAmount > 0)
         {
             heatBarFill.fillAmount -= 2 * heatSensivity * Time.deltaTime;
         }
         else
         {
+            overHeat = false;
             CancelInvoke("DecreaseHeatBar");
+            Debug.Log("cooled fillAmount: " + heatBarFill.fillAmount);
         }
+
+        ChangeCardColor(heatBarFill.fillAmount);
+    }
+
+    private void ChangeCardColor(float amount)
+    {
+        card.GetComponent<Renderer>().material.color = Color.Lerp(defCardColor, heatCardColor, amount*1.1f);
+        heatWarningUI.SetActive(amount > 0.75f);
     }
 
     public void IncreaseSpeed(bool sign)
