@@ -23,8 +23,10 @@ public class GameManager : MonoBehaviour
     public bool isMining = false;
 
     private int pipeCount = 1;
+    private GameObject[] pipesArray = new GameObject[0];
     private float moneyCount = 0f;
     private bool overHeat = false;
+    private bool mergeable = false;
     private Color defCardColor;
 
 
@@ -137,6 +139,7 @@ public class GameManager : MonoBehaviour
         if(pipeCount < pipes.childCount)
         {
             pipes.GetChild(pipeCount).gameObject.SetActive(true);
+            AddRemoveToPipesArray(true, pipes.GetChild(pipeCount).gameObject);
             pipeCount++;
         }
         else
@@ -147,5 +150,38 @@ public class GameManager : MonoBehaviour
             }
             pipeCount = 1;
         }
+    }
+
+    public void MergePipes()
+    {
+
+    }
+
+    private void AddRemoveToPipesArray(bool add, GameObject pipe)
+    {
+        int newSize = (pipesArray != null) ? pipesArray.Length + 1 : 1;
+        Array.Resize(ref pipesArray, newSize);
+
+        pipesArray[newSize - 1] = pipe;
+        CheckMergeable();
+    }
+
+    private void CheckMergeable()
+    {
+        int tempMult = pipesArray[0].GetComponent<PipeController>().multiplier;
+        int sameMultiplierCount = 0;
+        for(int i = 1;i < pipesArray.Length;i++)
+        {
+            GameObject pipe = pipesArray[i];
+            if(pipe.GetComponent<PipeController>().multiplier == tempMult)
+            {
+                sameMultiplierCount++;
+            }
+            else
+            {
+                tempMult = pipe.GetComponent<PipeController>().multiplier;
+            }
+        }
+        mergeable = sameMultiplierCount > 2 ? true : false;
     }
 }
