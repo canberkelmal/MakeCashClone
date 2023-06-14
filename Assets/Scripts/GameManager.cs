@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     private bool mergeable = false;
     private bool mergePhase1 = false;
     private bool mergePhase2 = false;
+    private bool mergePhase3 = false;
     private Color defCardColor;
 
 
@@ -171,44 +172,66 @@ public class GameManager : MonoBehaviour
     }
     public void MergePipesLoop()
     {
+        GameObject mergedPipe = mergeablePipesArray[1].gameObject;
         if (!mergePhase1)
         {
-            mergeablePipesArray[1].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[1].transform.localPosition, mergeablePipesArray[1].transform.localPosition + Vector3.forward * -0.5f, mergeAnimSensivity*Time.deltaTime);
-            if (mergeablePipesArray[1].transform.localPosition.z <= -0.5f)
+            mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, mergedPipe.transform.localPosition + Vector3.forward * -0.5f, mergeAnimSensivity*Time.deltaTime);
+            if (mergedPipe.transform.localPosition.z <= -0.5f)
             {
                 mergePhase1 = true;
             }
         }
         else if (!mergePhase2)
         {
-            Vector3 targetPoint = new Vector3(mergeablePipesArray[1].transform.localPosition.x, mergeablePipesArray[1].transform.localPosition.y, 0);
+            Vector3 targetPoint = new Vector3(mergedPipe.transform.localPosition.x, mergedPipe.transform.localPosition.y, 0);
             mergeablePipesArray[0].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[0].transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             mergeablePipesArray[2].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[2].transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
-            if (mergeablePipesArray[0].transform.localPosition.z <= -0.5f)
+            if (mergeablePipesArray[0].transform.localPosition.x == targetPoint.x)
             {
-                mergePhase1 = true;
+                mergePhase2 = true;
             }
         }
-        else
+        else if (!mergePhase3)
         {
-            CancelInvoke("MergePipesLoop");
+            AddRemoveToPipesArray(false, mergeablePipesArray[0]);
+            AddRemoveToPipesArray(false, mergeablePipesArray[2]);
+            pipeCount -= 2;
+            Vector3 targetPoint = Vector3.right * (pipes.childCount - 1);
+            mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
         }
-    }
-
-    private void AddRemoveToMergeableArray(bool add, GameObject pipe)
-    {
-        int newSize = (mergeablePipesArray != null) ? mergeablePipesArray.Length + 1 : 1;
-        Array.Resize(ref mergeablePipesArray, newSize);
-
-        mergeablePipesArray[newSize - 1] = pipe;
     }
     private void AddRemoveToPipesArray(bool add, GameObject pipe)
     {
-        int newSize = (pipesArray != null) ? pipesArray.Length + 1 : 1;
-        Array.Resize(ref pipesArray, newSize);
+        if(add)
+        {
+            int newSize = (pipesArray != null) ? pipesArray.Length + 1 : 1;
+            Array.Resize(ref pipesArray, newSize);
 
-        pipesArray[newSize - 1] = pipe;
-        CheckMergeable();
+            pipesArray[newSize - 1] = pipe;
+            CheckMergeable();
+        }
+        else
+        {
+            if (pipesArray != null && pipesArray.Length > 0)
+            {
+                for (int i = 0; i < pipesArray.Length; i++)
+                {
+                    if (pipesArray[i] == pipe)
+                    {
+                        for (int j = i; j < pipesArray.Length - 1; j++)
+                        {
+                            pipesArray[j] = pipesArray[j + 1];
+                        }
+
+                        Array.Resize(ref pipesArray, pipesArray.Length - 1);
+
+                        Destroy(pipe);
+
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void CheckMergeable()
@@ -235,5 +258,13 @@ public class GameManager : MonoBehaviour
             }
         }
         mergeable = sameMultiplierCount > 2 ? true : false;
+    }
+
+    private void AddRemoveToMergeableArray(bool add, GameObject pipe)
+    {
+        int newSize = (mergeablePipesArray != null) ? mergeablePipesArray.Length + 1 : 1;
+        Array.Resize(ref mergeablePipesArray, newSize);
+
+        mergeablePipesArray[newSize - 1] = pipe;
     }
 }
