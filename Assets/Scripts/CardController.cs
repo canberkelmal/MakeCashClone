@@ -16,7 +16,7 @@ public class CardController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        cardFan = transform.Find("Fan");
+        cardFan = transform.Find("fan");
         fanSpeed = defaultFanSpeed;
     }
     // Update is called once per frame

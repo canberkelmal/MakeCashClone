@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
 
     private void ChangeCardColor(float amount)
     {
-        card.GetComponent<Renderer>().material.color = Color.Lerp(defCardColor, heatCardColor, amount*1.1f);
+        //card.GetComponent<Renderer>().material.color = Color.Lerp(defCardColor, heatCardColor, amount*1.1f);
         heatWarningUI.SetActive(amount > 0.75f);
     }
 
