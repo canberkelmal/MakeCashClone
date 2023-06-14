@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject card;
     public GameObject coinObj;
     public GameObject heatWarningUI;
+    public GameObject pipePrefab;
     public Color heatCardColor;
     public Transform pipes;
     public Image heatBarFill;
@@ -24,9 +25,10 @@ public class GameManager : MonoBehaviour
 
     private int pipeCount = 1;
     private GameObject[] pipesArray = new GameObject[0];
+    private GameObject[] mergeablePipesArray = new GameObject[0];
     private float moneyCount = 0f;
     private bool overHeat = false;
-    private bool mergeable = false;
+    public bool mergeable = false;
     private Color defCardColor;
 
 
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         IncreaseMoneyCount(0);
+        AddRemoveToPipesArray(true, pipes.GetChild(0).gameObject);
     }
     // Update is called once per frame
     void Update()
@@ -151,12 +154,26 @@ public class GameManager : MonoBehaviour
             pipeCount = 1;
         }
     }
+    public void AddPipe2()
+    {        
+        GameObject addedPipe = Instantiate(pipePrefab, pipes);
+        addedPipe.transform.localPosition = Vector3.right * (pipes.childCount-1);
+        AddRemoveToPipesArray(true, addedPipe);
+    }
+
 
     public void MergePipes()
     {
 
     }
 
+    private void AddRemoveToMergeableArray(bool add, GameObject pipe)
+    {
+        int newSize = (mergeablePipesArray != null) ? mergeablePipesArray.Length + 1 : 1;
+        Array.Resize(ref mergeablePipesArray, newSize);
+
+        mergeablePipesArray[newSize - 1] = pipe;
+    }
     private void AddRemoveToPipesArray(bool add, GameObject pipe)
     {
         int newSize = (pipesArray != null) ? pipesArray.Length + 1 : 1;
@@ -169,17 +186,19 @@ public class GameManager : MonoBehaviour
     private void CheckMergeable()
     {
         int tempMult = pipesArray[0].GetComponent<PipeController>().multiplier;
-        int sameMultiplierCount = 0;
+        int sameMultiplierCount = 1;
         for(int i = 1;i < pipesArray.Length;i++)
         {
             GameObject pipe = pipesArray[i];
-            if(pipe.GetComponent<PipeController>().multiplier == tempMult)
+            PipeController pipeController = pipe.GetComponent<PipeController>();
+            if (pipeController.multiplier == tempMult)
             {
                 sameMultiplierCount++;
+                AddRemoveToMergeableArray(true, pipe);
             }
             else
             {
-                tempMult = pipe.GetComponent<PipeController>().multiplier;
+                tempMult = pipeController.multiplier;
             }
         }
         mergeable = sameMultiplierCount > 2 ? true : false;
