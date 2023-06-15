@@ -28,18 +28,9 @@ public class PipeController : MonoBehaviour
         incomeTx = pipeCanvas.transform.Find("IncomeTx");
     }
 
-    private void Update()
+    public void TrigOtherPipes()
     {
-        if(gameManager.isMining && !mining)
-        {
-            mining = true;
-            GetComponent<Animator>().SetTrigger("SlideCoin");
-        }
-        else if (!gameManager.isMining && mining)
-        {
-            mining = false;
-            GetComponent<Animator>().SetTrigger("StopCoin");
-        }
+        gameManager.TrigShortPipes();
     }
 
     public void InstantiateCoin()

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject coinObj;
     public GameObject heatWarningUI;
     public GameObject pipePrefab;
+    public GameObject curvedPipePrefab;
     public Color heatCardColor;
     public Transform pipes;
     public Image heatBarFill;
@@ -59,11 +60,11 @@ public class GameManager : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetMouseButtonDown(0) && !overHeat)
+            if (Input.GetMouseButtonDown(0) && !overHeat && !isMining)
             {
                 StartMining();
             }
-            else if (Input.GetMouseButtonUp(0))
+            else if (Input.GetMouseButtonUp(0) && !overHeat && isMining)
             {
                 StopMining();
             }
@@ -84,34 +85,55 @@ public class GameManager : MonoBehaviour
         CancelInvoke("DecreaseHeatBar");
         InvokeRepeating("IncreaseHeatBar", 0, Time.fixedDeltaTime);
         isMining = true;
+
+        pipes.transform.GetChild(0).GetComponent<Animator>().SetTrigger("SlideCoin");
+
         cardObj.GetComponent<CardController>().SetFanSpeed(true);
     }
 
     private void StopMining()
     {
+        Debug.Log("stopMining");
         CancelInvoke("IncreaseHeatBar");
         InvokeRepeating("DecreaseHeatBar", 0, Time.fixedDeltaTime);
         isMining = false;
+
+        for(int i = 0; i < pipes.transform.childCount; i++)
+        {
+            pipes.transform.GetChild(i).GetComponent<Animator>().SetTrigger("StopCoin");
+            Debug.Log(pipes.transform.GetChild(i) + " stopped");
+        }
+
         cardObj.GetComponent<CardController>().SetFanSpeed(false);
+    }
+
+    public void TrigShortPipes()
+    {
+        for(int i = 1; i<pipes.childCount; i++)
+        {
+            pipes.transform.GetChild(i).GetComponent<Animator>().SetTrigger("SlideCoin");
+        }
     }
 
     private void IncreaseHeatBar()
     {
-        if(heatBarFill.fillAmount < 1)
+        ChangeCardColor(heatBarFill.fillAmount);
+        if (heatBarFill.fillAmount < 1)
         {
             heatBarFill.fillAmount += heatSensivity * Time.deltaTime;
         }
         else
         {
             overHeat = true;
-            StopMining();
             Debug.Log("overheat fillAmount: " + heatBarFill.fillAmount);
+            StopMining();
+            CancelInvoke("IncreaseHeatBar");
         }
 
-        ChangeCardColor(heatBarFill.fillAmount);
     }
     private void DecreaseHeatBar()
     {
+        ChangeCardColor(heatBarFill.fillAmount);
         if (heatBarFill.fillAmount > 0)
         {
             heatBarFill.fillAmount -= 2 * heatSensivity * Time.deltaTime;
@@ -119,11 +141,9 @@ public class GameManager : MonoBehaviour
         else
         {
             overHeat = false;
-            CancelInvoke("DecreaseHeatBar");
             Debug.Log("cooled fillAmount: " + heatBarFill.fillAmount);
+            CancelInvoke("DecreaseHeatBar");
         }
-
-        ChangeCardColor(heatBarFill.fillAmount);
     }
 
     private void ChangeCardColor(float amount)

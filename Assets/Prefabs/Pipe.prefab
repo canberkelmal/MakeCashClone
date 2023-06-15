@@ -290,6 +290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4992311076488248202}
   - component: {fileID: 6870770386360231229}
+  - component: {fileID: 6825018774058947514}
   m_Layer: 0
   m_Name: Pipe
   m_TagString: Untagged
@@ -332,6 +333,27 @@ MonoBehaviour:
   incomeTxAsset: {fileID: 3952091780859735855, guid: 88bae741764db7047bb2e26a00a3f4bf,
     type: 3}
   multiplier: 1
+--- !u!95 &6825018774058947514
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8824903534829820739}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fc88724de1133354ea3468f974c0643d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &2194251507087762681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -447,7 +469,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0024523735
+      value: 0.002452374
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
@@ -457,7 +479,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0017102063
+      value: -0.001710206
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
@@ -586,7 +608,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1c3fe82abbb25f24f8e5e40b89cfb292,
         type: 3}
       propertyPath: m_Name
-      value: Mounth
+      value: Mouth
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

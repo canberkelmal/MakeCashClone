@@ -3476,6 +3476,7 @@ MonoBehaviour:
   heatWarningUI: {fileID: 860746899}
   pipePrefab: {fileID: 8824903534829820739, guid: 3f62869f2dfc87f4da2353fec915f6c0,
     type: 3}
+  curvedPipePrefab: {fileID: 0}
   heatCardColor: {r: 1, g: 0, b: 0, a: 1}
   pipes: {fileID: 6440147245006436432}
   heatBarFill: {fileID: 3120546060721012281}
@@ -3756,17 +3757,17 @@ PrefabInstance:
     - target: {fileID: 4992311076488248202, guid: 3f62869f2dfc87f4da2353fec915f6c0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4992311076488248202, guid: 3f62869f2dfc87f4da2353fec915f6c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.275
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4992311076488248202, guid: 3f62869f2dfc87f4da2353fec915f6c0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.188
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4992311076488248202, guid: 3f62869f2dfc87f4da2353fec915f6c0,
         type: 3}
@@ -3813,12 +3814,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f62869f2dfc87f4da2353fec915f6c0, type: 3}
---- !u!1 &3905970164773672582 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7251015594301408424, guid: 36f568f6fe3520542a38c7d883520751,
-    type: 3}
-  m_PrefabInstance: {fileID: 5950384754917151278}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4515305239299452624
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3947,17 +3942,17 @@ PrefabInstance:
     - target: {fileID: 1170826617447713567, guid: 36f568f6fe3520542a38c7d883520751,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: 0.032
       objectReference: {fileID: 0}
     - target: {fileID: 1170826617447713567, guid: 36f568f6fe3520542a38c7d883520751,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.79
+      value: 0.479
       objectReference: {fileID: 0}
     - target: {fileID: 1170826617447713567, guid: 36f568f6fe3520542a38c7d883520751,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.183
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 1170826617447713567, guid: 36f568f6fe3520542a38c7d883520751,
         type: 3}
@@ -4002,11 +3997,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7251015594301408424, guid: 36f568f6fe3520542a38c7d883520751,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6000743751890910694}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36f568f6fe3520542a38c7d883520751, type: 3}
 --- !u!4 &6000743751890910693 stripped
 Transform:
@@ -4014,21 +4005,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5950384754917151278}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6000743751890910694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3905970164773672582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e971306b08bae42a52a58b2ba89094, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  incomeTxAsset: {fileID: 3952091780859735855, guid: 88bae741764db7047bb2e26a00a3f4bf,
-    type: 3}
-  multiplier: 1
 --- !u!4 &6440147245006436432
 Transform:
   m_ObjectHideFlags: 0
@@ -4037,7 +4013,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985854051500906290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.77, y: 0, z: 0}
+  m_LocalPosition: {x: -2.789, y: -2.268, z: 0.191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

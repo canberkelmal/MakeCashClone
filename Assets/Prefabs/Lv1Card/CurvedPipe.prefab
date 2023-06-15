@@ -289,6 +289,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1170826617447713567}
+  - component: {fileID: 2824987538167916945}
+  - component: {fileID: 4045843866197285211}
   m_Layer: 0
   m_Name: CurvedPipe
   m_TagString: Untagged
@@ -303,19 +305,55 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7251015594301408424}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1, y: -1.79, z: 0.183}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6606331441135207949}
-  - {fileID: 6521779652567344895}
+  - {fileID: 6703816365080887573}
   - {fileID: 5348082034133800844}
   - {fileID: 5414322736395770821}
   - {fileID: 482116591228035784}
   m_Father: {fileID: 0}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2824987538167916945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251015594301408424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e971306b08bae42a52a58b2ba89094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  incomeTxAsset: {fileID: 3952091780859735855, guid: 88bae741764db7047bb2e26a00a3f4bf,
+    type: 3}
+  multiplier: 1
+--- !u!95 &4045843866197285211
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7251015594301408424}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 67f559f6ee3e2f14b960b3981a94c718, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &5523999928215256110
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -347,7 +385,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.85110855
+      value: 0.8511086
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8d93001fc8931db4d98007bf09119a9f,
         type: 3}
@@ -481,7 +519,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1c3fe82abbb25f24f8e5e40b89cfb292,
         type: 3}
       propertyPath: m_Name
-      value: Mounth
+      value: Mouth
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -577,7 +615,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 829612dbf88444745b0640e0fdd91eb4, type: 3}
---- !u!4 &6521779652567344895 stripped
+--- !u!4 &6703816365080887573 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 829612dbf88444745b0640e0fdd91eb4,
     type: 3}
