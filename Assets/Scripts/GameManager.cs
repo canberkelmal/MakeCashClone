@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
     [NonSerialized]
     public bool isMining = false;
 
-    public int pipeCount = 1;
+    public int pipeCount = 0;
     public GameObject[] pipesArray = new GameObject[0];
     public GameObject[] mergeablePipesArray = new GameObject[0];
     private float moneyCount = 0f;
@@ -33,8 +34,11 @@ public class GameManager : MonoBehaviour
     private bool mergeable = false;
     private bool mergePhase1 = false;
     private bool mergePhase2 = false;
-    private bool mergePhase3 = false;
     private Color defCardColor;
+    private Vector3 curvedLocalPos;
+    public GameObject mergedPipe;
+    bool isCurvedMerged = false;
+    private bool areMergedDeleted = false;
 
 
     private void Awake()
@@ -46,7 +50,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         IncreaseMoneyCount(0);
-        AddRemoveToPipesArray(true, pipes.GetChild(0).gameObject);
+        for(int i = 0; i < pipes.childCount; i++)
+        {
+            AddRemoveToPipesArray(true, pipes.GetChild(i).gameObject);
+        }
+        curvedLocalPos = pipes.GetChild(0).localPosition;
     }
     // Update is called once per frame
     void Update()
@@ -160,24 +168,6 @@ public class GameManager : MonoBehaviour
             pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(add);
         }
     }
-
-    public void AddPipe()
-    {
-        if(pipeCount < pipes.childCount)
-        {
-            pipes.GetChild(pipeCount).gameObject.SetActive(true);
-            AddRemoveToPipesArray(true, pipes.GetChild(pipeCount).gameObject);
-            pipeCount++;
-        }
-        else
-        {
-            for(int i = 1; i < pipes.childCount; i++)
-            {
-                pipes.GetChild(i).gameObject.SetActive(false);
-            }
-            pipeCount = 1;
-        }
-    }
     public void AddPipe2()
     {        
         GameObject addedPipe = Instantiate(pipePrefab, pipes);
@@ -188,11 +178,16 @@ public class GameManager : MonoBehaviour
 
     public void MergePipes()
     {
+        mergedPipe = mergeablePipesArray[1].gameObject;
+
+        // Check if the curved pipe is merged
+        isCurvedMerged = mergeablePipesArray[0].GetComponent<PipeController>().isCurved ? true : false;
+        areMergedDeleted = false;
+
         InvokeRepeating("MergePipesLoop", 0, Time.fixedDeltaTime);
     }
     public void MergePipesLoop()
-    {
-        GameObject mergedPipe = mergeablePipesArray[1].gameObject;
+    {     
         if (!mergePhase1)
         {
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, mergedPipe.transform.localPosition + Vector3.forward * -0.5f, mergeAnimSensivity*Time.deltaTime);
@@ -211,19 +206,41 @@ public class GameManager : MonoBehaviour
                 mergePhase2 = true;
             }
         }
-        else if (!mergePhase3)
+        else
         {
-            AddRemoveToPipesArray(false, mergeablePipesArray[0]);
-            AddRemoveToPipesArray(false, mergeablePipesArray[2]);
-            pipeCount -= 2;
-            Vector3 targetPoint = Vector3.right * (pipes.childCount - 1);
+            if(!areMergedDeleted && !isCurvedMerged)
+            {
+                AddRemoveToPipesArray(false, mergeablePipesArray[0]);
+                AddRemoveToPipesArray(false, mergeablePipesArray[2]);
+                areMergedDeleted = true;
+            }
+            else if (!areMergedDeleted && isCurvedMerged)
+            {
+                AddRemoveToPipesArray(false, mergeablePipesArray[1]);
+                AddRemoveToPipesArray(false, mergeablePipesArray[2]);
+                mergedPipe = mergeablePipesArray[0];
+                areMergedDeleted = true;
+            }
+
+            Vector3 targetPoint = isCurvedMerged ? curvedLocalPos : Vector3.right * (pipes.childCount - 1);
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
+            if(mergedPipe.transform.localPosition.x == targetPoint.x)
+            {
+                mergePhase1 = false;
+                mergePhase2 = false;
+                isCurvedMerged = false;
+                mergeablePipesArray = new GameObject[0];
+                CheckMergeable();
+                CancelInvoke("MergePipesLoop");
+            }
         }
+
     }
     private void AddRemoveToPipesArray(bool add, GameObject pipe)
     {
         if(add)
         {
+            pipeCount++;
             int newSize = (pipesArray != null) ? pipesArray.Length + 1 : 1;
             Array.Resize(ref pipesArray, newSize);
 
@@ -246,6 +263,7 @@ public class GameManager : MonoBehaviour
                         Array.Resize(ref pipesArray, pipesArray.Length - 1);
 
                         Destroy(pipe);
+                        pipeCount--;
 
                         break;
                     }
@@ -276,15 +294,65 @@ public class GameManager : MonoBehaviour
             {
                 tempMult = pipeController.multiplier;
             }
+
+            if(sameMultiplierCount == 3)
+            {
+                break;
+            }
         }
         mergeable = sameMultiplierCount > 2 ? true : false;
     }
 
     private void AddRemoveToMergeableArray(bool add, GameObject pipe)
     {
-        int newSize = (mergeablePipesArray != null) ? mergeablePipesArray.Length + 1 : 1;
-        Array.Resize(ref mergeablePipesArray, newSize);
 
-        mergeablePipesArray[newSize - 1] = pipe;
+        if (add)
+        {
+            int newSize = (mergeablePipesArray != null) ? mergeablePipesArray.Length + 1 : 1;
+            Array.Resize(ref mergeablePipesArray, newSize);
+
+            mergeablePipesArray[newSize - 1] = pipe;
+        }
+        else
+        {
+            if (mergeablePipesArray != null && mergeablePipesArray.Length > 0)
+            {
+                for (int i = 0; i < mergeablePipesArray.Length; i++)
+                {
+                    if (mergeablePipesArray[i] == pipe)
+                    {
+                        for (int j = i; j < mergeablePipesArray.Length - 1; j++)
+                        {
+                            mergeablePipesArray[j] = mergeablePipesArray[j + 1];
+                        }
+
+                        Array.Resize(ref mergeablePipesArray, mergeablePipesArray.Length - 1);
+
+                        Destroy(pipe);
+
+                        break;
+                    }
+                }
+            }
+        }
     }
+    /*
+
+    public void AddPipe()
+    {
+        if(pipeCount < pipes.childCount)
+        {
+            pipes.GetChild(pipeCount).gameObject.SetActive(true);
+            AddRemoveToPipesArray(true, pipes.GetChild(pipeCount).gameObject);
+            pipeCount++;
+        }
+        else
+        {
+            for(int i = 1; i < pipes.childCount; i++)
+            {
+                pipes.GetChild(i).gameObject.SetActive(false);
+            }
+            pipeCount = 1;
+        }
+    }*/
 }

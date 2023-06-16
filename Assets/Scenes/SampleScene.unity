@@ -3476,7 +3476,8 @@ MonoBehaviour:
   heatWarningUI: {fileID: 860746899}
   pipePrefab: {fileID: 8824903534829820739, guid: 3f62869f2dfc87f4da2353fec915f6c0,
     type: 3}
-  curvedPipePrefab: {fileID: 0}
+  curvedPipePrefab: {fileID: 7251015594301408424, guid: 36f568f6fe3520542a38c7d883520751,
+    type: 3}
   heatCardColor: {r: 1, g: 0, b: 0, a: 1}
   pipes: {fileID: 6440147245006436432}
   heatBarFill: {fileID: 3120546060721012281}
@@ -3485,9 +3486,10 @@ MonoBehaviour:
   heatSensivity: 0.3
   addSpeedAmount: 0.1
   mergeAnimSensivity: 1
-  pipeCount: 1
+  pipeCount: 0
   pipesArray: []
   mergeablePipesArray: []
+  mergedPipe: {fileID: 0}
 --- !u!4 &2101429891
 Transform:
   m_ObjectHideFlags: 0

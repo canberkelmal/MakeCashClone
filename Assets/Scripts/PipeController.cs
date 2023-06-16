@@ -16,6 +16,7 @@ public class PipeController : MonoBehaviour
     private bool mining = false;
 
     public int multiplier = 1;
+    public bool isCurved;
 
 
     private void Awake()
