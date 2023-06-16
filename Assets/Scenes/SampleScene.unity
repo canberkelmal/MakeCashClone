@@ -2388,13 +2388,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2101429888}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 2101429889}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: IncreaseIncome
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3393,7 +3393,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2101429889}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: AddPipe2
+        m_MethodName: AddPipe
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3485,11 +3485,9 @@ MonoBehaviour:
   moneyPerCoin: 1
   heatSensivity: 0.3
   addSpeedAmount: 0.1
-  mergeAnimSensivity: 1
+  mergeAnimSensivity: 3
+  incomeMultiplier: 1.1
   pipeCount: 0
-  pipesArray: []
-  mergeablePipesArray: []
-  mergedPipe: {fileID: 0}
 --- !u!4 &2101429891
 Transform:
   m_ObjectHideFlags: 0

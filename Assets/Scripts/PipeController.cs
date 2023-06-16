@@ -13,7 +13,6 @@ public class PipeController : MonoBehaviour
     private Transform incomeTx;
     private GameManager gameManager;
     private Text multiplierTx;
-    private bool mining = false;
 
     public int multiplier = 1;
     public bool isCurved;
@@ -39,7 +38,7 @@ public class PipeController : MonoBehaviour
         Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 0));
         gameManager.IncreaseMoneyCount(multiplier);
         GameObject risingTx = Instantiate(incomeTxAsset, incomeTx.transform.position, Quaternion.identity, pipeCanvas.transform);
-        risingTx.GetComponent<Text>().text = "$" + (multiplier * gameManager.moneyPerCoin).ToString();
+        risingTx.GetComponent<Text>().text = "$" + ((int)(multiplier * gameManager.moneyPerCoin)).ToString();
         Destroy(risingTx, 0.6f);
     }
     public void IncreseSpeed(float amount)

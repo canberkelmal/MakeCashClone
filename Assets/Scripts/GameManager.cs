@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -22,23 +23,25 @@ public class GameManager : MonoBehaviour
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
     public float mergeAnimSensivity = 1f;
+    public float incomeMultiplier = 0.1f;
+    public int pipeCount = 0;
 
     [NonSerialized]
     public bool isMining = false;
 
-    public int pipeCount = 0;
-    public GameObject[] pipesArray = new GameObject[0];
-    public GameObject[] mergeablePipesArray = new GameObject[0];
-    private float moneyCount = 0f;
+    private GameObject[] pipesArray = new GameObject[0];
+    private GameObject[] mergeablePipesArray = new GameObject[0];
+    private GameObject mergedPipe;
+    private bool control = true;
     private bool overHeat = false;
     private bool mergeable = false;
     private bool mergePhase1 = false;
     private bool mergePhase2 = false;
+    private bool isCurvedMerged = false;
+    private bool areMergedDeleted = false;
+    private float moneyCount = 0f;
     private Color defCardColor;
     private Vector3 curvedLocalPos;
-    public GameObject mergedPipe;
-    bool isCurvedMerged = false;
-    private bool areMergedDeleted = false;
 
 
     private void Awake()
@@ -66,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     private void InputController()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && control)
         {
             if (Input.GetMouseButtonDown(0) && !overHeat && !isMining)
             {
@@ -77,6 +80,10 @@ public class GameManager : MonoBehaviour
                 StopMining();
             }
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
     }
 
     public void IncreaseMoneyCount(int multiplier)
@@ -84,7 +91,7 @@ public class GameManager : MonoBehaviour
         float income = moneyPerCoin * multiplier;
         moneyCount += income;
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
-        moneyTx.text = "$" + moneyCount.ToString();
+        moneyTx.text = "$" + ((int)moneyCount).ToString();
         Debug.Log("Money: " + moneyCount);
     }
 
@@ -168,26 +175,34 @@ public class GameManager : MonoBehaviour
             pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(add);
         }
     }
-    public void AddPipe2()
+    public void AddPipe()
     {        
         GameObject addedPipe = Instantiate(pipePrefab, pipes);
         addedPipe.transform.localPosition = Vector3.right * (pipes.childCount-1);
         AddRemoveToPipesArray(true, addedPipe);
     }
 
+    public void IncreaseIncome()
+    {
+        moneyPerCoin *= incomeMultiplier;
+    }
 
     public void MergePipes()
     {
-        mergedPipe = mergeablePipesArray[1].gameObject;
+        if (mergeable)
+        {
+            mergedPipe = mergeablePipesArray[1].gameObject;
 
-        // Check if the curved pipe is merged
-        isCurvedMerged = mergeablePipesArray[0].GetComponent<PipeController>().isCurved ? true : false;
-        areMergedDeleted = false;
+            // Check if the curved pipe is merged
+            isCurvedMerged = mergeablePipesArray[0].GetComponent<PipeController>().isCurved ? true : false;
+            areMergedDeleted = false;
 
-        InvokeRepeating("MergePipesLoop", 0, Time.fixedDeltaTime);
+            InvokeRepeating("MergePipesLoop", 0, Time.fixedDeltaTime);
+        }
     }
     public void MergePipesLoop()
-    {     
+    {
+        control = false;
         if (!mergePhase1)
         {
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, mergedPipe.transform.localPosition + Vector3.forward * -0.5f, mergeAnimSensivity*Time.deltaTime);
@@ -239,6 +254,7 @@ public class GameManager : MonoBehaviour
                 isCurvedMerged = false;
                 mergeablePipesArray = new GameObject[0];
                 CheckMergeable();
+                control = true;
                 CancelInvoke("MergePipesLoop");
             }
         }
@@ -349,8 +365,14 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    /*
+    
+    // Reload the current scene to restart the game
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
+    /*
     public void AddPipe()
     {
         if(pipeCount < pipes.childCount)
