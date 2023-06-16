@@ -39,10 +39,17 @@ public class PipeController : MonoBehaviour
         Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 0));
         gameManager.IncreaseMoneyCount(multiplier);
         GameObject risingTx = Instantiate(incomeTxAsset, incomeTx.transform.position, Quaternion.identity, pipeCanvas.transform);
+        risingTx.GetComponent<Text>().text = "$" + (multiplier * gameManager.moneyPerCoin).ToString();
         Destroy(risingTx, 0.6f);
     }
     public void IncreseSpeed(float amount)
     {
         GetComponent<Animator>().speed += amount;
+    }
+
+    public void SetMultiplier()
+    {
+        multiplier *= 4;
+        multiplierTx.text = "X" + multiplier.ToString(); 
     }
 }

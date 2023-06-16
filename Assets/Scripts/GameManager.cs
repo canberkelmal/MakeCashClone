@@ -203,6 +203,14 @@ public class GameManager : MonoBehaviour
             mergeablePipesArray[2].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[2].transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             if (mergeablePipesArray[0].transform.localPosition.x == targetPoint.x)
             {
+                if (isCurvedMerged)
+                {
+                    mergeablePipesArray[0].GetComponent<PipeController>().SetMultiplier();
+                }
+                else
+                {
+                    mergedPipe.GetComponent<PipeController>().SetMultiplier();
+                }
                 mergePhase2 = true;
             }
         }
@@ -277,6 +285,7 @@ public class GameManager : MonoBehaviour
         mergeablePipesArray = new GameObject[0];
         int tempMult = pipesArray[0].GetComponent<PipeController>().multiplier;
         int sameMultiplierCount = 1;
+        bool isFirstSet = false;
         for(int i = 1;i < pipesArray.Length;i++)
         {
             GameObject pipe = pipesArray[i];
@@ -284,14 +293,18 @@ public class GameManager : MonoBehaviour
             if (pipeController.multiplier == tempMult)
             {
                 sameMultiplierCount++;
-                if(i == 1)
+                if(!isFirstSet)
                 {
-                    AddRemoveToMergeableArray(true, pipesArray[0]);                    
+                    isFirstSet = true;
+                    AddRemoveToMergeableArray(true, pipesArray[i-1]);                    
                 }
                 AddRemoveToMergeableArray(true, pipe);
             }
             else
             {
+                isFirstSet = false;
+                sameMultiplierCount = 1;
+                mergeablePipesArray = new GameObject[0];
                 tempMult = pipeController.multiplier;
             }
 
