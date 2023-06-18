@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject heatWarningUI;
     public GameObject pipePrefab;
     public GameObject curvedPipePrefab;
+    public GameObject SettingsPanel;
     public Color heatCardColor;
     public Transform pipes;
     public Image heatBarFill;
@@ -32,12 +33,13 @@ public class GameManager : MonoBehaviour
 
     private GameObject[] pipesArray = new GameObject[0];
     private GameObject[] mergeablePipesArray = new GameObject[0];
-    private GameObject mergedPipe;
+    public GameObject mergedPipe;
     private bool control = true;
     private bool overHeat = false;
     private bool mergeable = false;
     private bool mergePhase1 = false;
     private bool mergePhase2 = false;
+    private bool mergePhase3 = false;
     private bool isCurvedMerged = false;
     private bool areMergedDeleted = false;
     public float moneyCount = 0f;
@@ -224,6 +226,28 @@ public class GameManager : MonoBehaviour
         control = true;
     }
 
+    public void Settings(bool open)
+    {
+        if(open)
+        {
+            control = false;
+            SettingsPanel.SetActive(true);
+        }
+        else
+        {
+            SettingsPanel.SetActive(false);
+            control = true;
+        }
+    }
+
+    public void ResetMoney()
+    {
+        moneyCount = 0;
+        PlayerPrefs.SetFloat("moneyCount", moneyCount);
+        moneyTx.text = "$" + moneyCount;
+        Debug.Log("Money: " + moneyCount);
+    }
+
     public void MergePipes()
     {
         if (mergeable)
@@ -266,9 +290,9 @@ public class GameManager : MonoBehaviour
                 mergePhase2 = true;
             }
         }
-        else
+        else if (!mergePhase3)
         {
-            if(!areMergedDeleted && !isCurvedMerged)
+            if (!areMergedDeleted && !isCurvedMerged)
             {
                 AddRemoveToPipesArray(false, mergeablePipesArray[0]);
                 AddRemoveToPipesArray(false, mergeablePipesArray[2]);
@@ -282,12 +306,23 @@ public class GameManager : MonoBehaviour
                 areMergedDeleted = true;
             }
 
+            Vector3 targetPoint = new Vector3(mergedPipe.transform.localPosition.x, mergedPipe.transform.localPosition.y, 0);
+            mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime); 
+            if(mergedPipe.transform.localPosition.z == 0)
+            {
+                mergePhase3 = true;
+            }
+        }
+        else
+        {
+
             Vector3 targetPoint = isCurvedMerged ? curvedLocalPos : Vector3.right * (pipes.childCount - 1);
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             if(mergedPipe.transform.localPosition.x == targetPoint.x)
             {
                 mergePhase1 = false;
                 mergePhase2 = false;
+                mergePhase3 = false;
                 isCurvedMerged = false;
                 mergeablePipesArray = new GameObject[0];
                 CheckMergeable();
