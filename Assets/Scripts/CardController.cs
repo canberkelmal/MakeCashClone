@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class CardController : MonoBehaviour
 {
-    [NonSerialized]
-    public Transform cardFan;
+    public Transform cardFan1, cardFan2;
     public float defaultFanSpeed = 1f;
     public float poweredFanSpeed = 1f;
+    public bool isLv2 = false;
 
 
     private float fanSpeed = 1f;
@@ -16,7 +16,6 @@ public class CardController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        cardFan = transform.Find("fan");
         fanSpeed = defaultFanSpeed;
     }
     // Update is called once per frame
@@ -29,7 +28,15 @@ public class CardController : MonoBehaviour
 
     private void RotateFan(float rotationSpeed)
     {
-        cardFan.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        if (!isLv2)
+        {
+            cardFan1.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        }
+        else
+        {
+            cardFan1.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+            cardFan2.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        }
     }
 
     public void SetFanSpeed(bool boost)

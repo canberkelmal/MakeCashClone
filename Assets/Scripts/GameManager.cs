@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public GameObject cardObj;
-    public GameObject card;
+    public GameObject Lv1Card, Lv2Card;
     public GameObject coinObj;
     public GameObject heatWarningUI;
     public GameObject pipePrefab;
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public float mergeAnimSensivity = 1f;
     public float incomeMultiplier = 0.1f;
     public int pipeCount = 0;
+    public Material[] pipeLevelColors = new Material[4];
 
     [NonSerialized]
     public bool isMining = false;
@@ -39,14 +40,14 @@ public class GameManager : MonoBehaviour
     private bool mergePhase2 = false;
     private bool isCurvedMerged = false;
     private bool areMergedDeleted = false;
-    private float moneyCount = 0f;
+    public float moneyCount = 0f;
     private Color defCardColor;
     private Vector3 curvedLocalPos;
 
 
     private void Awake()
     {
-        defCardColor = card.GetComponent<Renderer>().material.color;
+        //defCardColor = card.GetComponent<Renderer>().material.color;
         moneyCount = PlayerPrefs.GetFloat("moneyCount", 0);
     }
 
@@ -91,17 +92,33 @@ public class GameManager : MonoBehaviour
         float income = moneyPerCoin * multiplier;
         moneyCount += income;
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
-        moneyTx.text = "$" + ((int)moneyCount).ToString();
+        moneyTx.text = "$" + ConvertNumberToUIText(moneyCount);
         Debug.Log("Money: " + moneyCount);
     }
 
     private String ConvertNumberToUIText(float number)
     {
         String UITx = ">B";
-        if(number > 1000000000)
+        float operatedNumber;
+        if(number > 1000000000) // Billion
         {
-            
-            UITx = ((int)(number / 1000000000)).ToString();
+            operatedNumber = (int)(number / 100000000);
+            UITx = (operatedNumber / 10).ToString() + "B";
+        }
+        else if (number > 1000000) // Million
+        {
+            operatedNumber = (int)(number / 100000);
+            UITx = (operatedNumber / 10).ToString() + "M";
+        }
+        else if (number > 1000) // Thousand
+        {
+            operatedNumber = (int)(number / 100);
+            UITx = (operatedNumber / 10).ToString() + "K";
+        }
+        else
+        {
+            operatedNumber = (int)(number * 10);
+            UITx = (operatedNumber / 10).ToString();
         }
         return UITx; 
     }
@@ -196,6 +213,15 @@ public class GameManager : MonoBehaviour
     public void IncreaseIncome()
     {
         moneyPerCoin *= incomeMultiplier;
+    }
+
+    public void NewCard()
+    {
+        control = false;
+        cardObj = Lv2Card;
+        Lv1Card.SetActive(false);
+        Lv2Card.SetActive(true);
+        control = true;
     }
 
     public void MergePipes()

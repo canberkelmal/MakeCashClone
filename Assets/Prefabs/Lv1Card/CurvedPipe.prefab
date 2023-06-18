@@ -311,9 +311,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6606331441135207949}
+  - {fileID: 5414322736395770821}
   - {fileID: 6703816365080887573}
   - {fileID: 5348082034133800844}
-  - {fileID: 5414322736395770821}
   - {fileID: 482116591228035784}
   m_Father: {fileID: 0}
   m_RootOrder: -1
@@ -695,6 +695,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 6fa426e62fff16e4fa920e702d0d9af9,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c26f8ef624171a84d8069ea65ff5d0e5, type: 2}
     - target: {fileID: 919132149155446097, guid: 6fa426e62fff16e4fa920e702d0d9af9,
         type: 3}
       propertyPath: m_Name

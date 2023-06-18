@@ -50,5 +50,24 @@ public class PipeController : MonoBehaviour
     {
         multiplier *= 4;
         multiplierTx.text = "X" + multiplier.ToString(); 
+        switch (multiplier)
+        {
+            case 1:
+                transform.GetChild(0).GetComponent<Renderer>().material = gameManager.pipeLevelColors[0];
+                transform.GetChild(1).GetComponent<Renderer>().material = gameManager.pipeLevelColors[0];
+                break;
+            case 4:
+                transform.GetChild(0).GetComponent<Renderer>().material = gameManager.pipeLevelColors[1];
+                transform.GetChild(1).GetComponent<Renderer>().material = gameManager.pipeLevelColors[1];
+                break;
+            case 16:
+                transform.GetChild(0).GetComponent<Renderer>().material = gameManager.pipeLevelColors[2];
+                transform.GetChild(1).GetComponent<Renderer>().material = gameManager.pipeLevelColors[2];
+                break;
+            case 32:
+                transform.GetChild(0).GetComponent<Renderer>().material = gameManager.pipeLevelColors[3];
+                transform.GetChild(1).GetComponent<Renderer>().material = gameManager.pipeLevelColors[3];
+                break;
+        }
     }
 }

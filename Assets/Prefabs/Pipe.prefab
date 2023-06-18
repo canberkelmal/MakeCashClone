@@ -333,6 +333,7 @@ MonoBehaviour:
   incomeTxAsset: {fileID: 3952091780859735855, guid: 88bae741764db7047bb2e26a00a3f4bf,
     type: 3}
   multiplier: 1
+  isCurved: 0
 --- !u!95 &6825018774058947514
 Animator:
   serializedVersion: 5
@@ -694,6 +695,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 4c5ebc4eb4362074c9e67fbb4fa86fe1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: c26f8ef624171a84d8069ea65ff5d0e5, type: 2}
     - target: {fileID: 919132149155446097, guid: 4c5ebc4eb4362074c9e67fbb4fa86fe1,
         type: 3}
       propertyPath: m_Name
