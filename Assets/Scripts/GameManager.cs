@@ -95,6 +95,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("Money: " + moneyCount);
     }
 
+    private String ConvertNumberToUIText(float number)
+    {
+        String UITx = ">B";
+        if(number > 1000000000)
+        {
+            
+            UITx = ((int)(number / 1000000000)).ToString();
+        }
+        return UITx; 
+    }
+
     private void StartMining()
     {
         CancelInvoke("DecreaseHeatBar");
