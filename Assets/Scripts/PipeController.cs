@@ -36,6 +36,10 @@ public class PipeController : MonoBehaviour
     public void InstantiateCoin()
     {
         Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 0));
+        if(isCurved)
+        {
+            gameManager.moneyTx.transform.parent.GetComponent<Animator>().SetTrigger("Trig");
+        }
         gameManager.IncreaseMoneyCount(multiplier);
         GameObject risingTx = Instantiate(incomeTxAsset, incomeTx.transform.position, Quaternion.identity, pipeCanvas.transform);
         risingTx.GetComponent<Text>().text = "$" + ((int)(multiplier * gameManager.moneyPerCoin)).ToString();

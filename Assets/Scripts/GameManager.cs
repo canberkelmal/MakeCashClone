@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour
         moneyCount -= amount;
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
         moneyTx.text = "$" + ConvertNumberToUIText(moneyCount);
+        moneyTx.transform.parent.GetComponent<Animator>().SetTrigger("Trig");
         Debug.Log("Money: " + moneyCount);
     }
 
