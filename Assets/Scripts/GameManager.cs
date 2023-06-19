@@ -302,6 +302,7 @@ public class GameManager : MonoBehaviour
         control = false;
         if (!mergePhase1)
         {
+            mergedPipe.transform.Find("SlidingCoin").gameObject.SetActive(false);
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, mergedPipe.transform.localPosition + Vector3.forward * -0.5f, mergeAnimSensivity*Time.deltaTime);
             if (mergedPipe.transform.localPosition.z <= -0.5f)
             {
@@ -311,6 +312,8 @@ public class GameManager : MonoBehaviour
         else if (!mergePhase2)
         {
             Vector3 targetPoint = new Vector3(mergedPipe.transform.localPosition.x, mergedPipe.transform.localPosition.y, 0);
+            mergeablePipesArray[0].transform.Find("SlidingCoin").gameObject.SetActive(false);
+            mergeablePipesArray[2].transform.Find("SlidingCoin").gameObject.SetActive(false);
             mergeablePipesArray[0].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[0].transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             mergeablePipesArray[2].transform.localPosition = Vector3.MoveTowards(mergeablePipesArray[2].transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             if (mergeablePipesArray[0].transform.localPosition.x == targetPoint.x)
@@ -351,11 +354,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
             Vector3 targetPoint = isCurvedMerged ? curvedLocalPos : Vector3.right * (pipes.childCount - 1);
             mergedPipe.transform.localPosition = Vector3.MoveTowards(mergedPipe.transform.localPosition, targetPoint, mergeAnimSensivity * Time.deltaTime);
             if(mergedPipe.transform.localPosition.x == targetPoint.x)
             {
+                mergedPipe.transform.Find("SlidingCoin").gameObject.SetActive(true);
                 mergePhase1 = false;
                 mergePhase2 = false;
                 mergePhase3 = false;
