@@ -43,7 +43,7 @@ public class PipeController : MonoBehaviour
     }
     public void IncreseSpeed(float amount)
     {
-        GetComponent<Animator>().speed += amount;
+        GetComponent<Animator>().speed = amount;
     }
 
     public void SetMultiplier()

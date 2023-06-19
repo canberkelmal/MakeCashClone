@@ -20,11 +20,17 @@ public class GameManager : MonoBehaviour
     public Transform pipes;
     public Image heatBarFill;
     public Text moneyTx;
+    public GameObject speedButton;
+    public GameObject pipeButton;
+    public GameObject incomeButton;
     public float moneyPerCoin = 1f;
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
-    public float mergeAnimSensivity = 1f;
+    public float speedCost = 0.1f;
     public float incomeMultiplier = 0.1f;
+    public float incomeCost = 0.1f;
+    public float costMultiplier = 1.05f;
+    public float mergeAnimSensivity = 1f;
     public int pipeCount = 0;
     public Material[] pipeLevelColors = new Material[4];
 
@@ -45,6 +51,9 @@ public class GameManager : MonoBehaviour
     public float moneyCount = 0f;
     private Color defCardColor;
     private Vector3 curvedLocalPos;
+    private int speedLevel = 1;
+    private int incomeLevel = 1;
+
 
 
     private void Awake()
@@ -56,11 +65,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         IncreaseMoneyCount(0);
+
         for(int i = 0; i < pipes.childCount; i++)
         {
             AddRemoveToPipesArray(true, pipes.GetChild(i).gameObject);
         }
+
         curvedLocalPos = pipes.GetChild(0).localPosition;
+
+        SetUIs();
     }
     // Update is called once per frame
     void Update()
@@ -96,6 +109,15 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
         moneyTx.text = "$" + ConvertNumberToUIText(moneyCount);
         Debug.Log("Money: " + moneyCount);
+        CheckUIs();
+    }
+    public void DeccreaseMoneyCount(float amount)
+    {
+        moneyCount -= amount;
+        PlayerPrefs.SetFloat("moneyCount", moneyCount);
+        moneyTx.text = "$" + ConvertNumberToUIText(moneyCount);
+        Debug.Log("Money: " + moneyCount);
+        CheckUIs();
     }
 
     private String ConvertNumberToUIText(float number)
@@ -199,10 +221,20 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseSpeed(bool sign)
     {
+        DeccreaseMoneyCount(speedCost);
+        speedLevel++;
+        PlayerPrefs.SetInt("speedLevel", speedLevel);
+        speedButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(speedLevel);
+
+        speedCost *= costMultiplier;
+        PlayerPrefs.SetFloat("speedCost", speedCost);
+        speedButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(speedCost);
+
         float add = sign ? addSpeedAmount : -addSpeedAmount;
+        float speed = 1 + add * speedLevel;
         for(int i = 0; i < pipes.childCount; i++)
         {
-            pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(add);
+            pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(speed);
         }
     }
     public void AddPipe()
@@ -214,7 +246,16 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseIncome()
     {
-        moneyPerCoin *= incomeMultiplier;
+        DeccreaseMoneyCount(incomeCost);
+        incomeLevel++;
+        PlayerPrefs.SetInt("incomeLevel", incomeLevel);
+        incomeButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(incomeLevel);
+
+        incomeCost *= costMultiplier;
+        PlayerPrefs.SetFloat("incomeCost", incomeCost);
+        incomeButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(incomeCost);
+
+        moneyPerCoin = 1 + incomeLevel * incomeMultiplier;
     }
 
     public void NewCard()
@@ -238,14 +279,6 @@ public class GameManager : MonoBehaviour
             SettingsPanel.SetActive(false);
             control = true;
         }
-    }
-
-    public void ResetMoney()
-    {
-        moneyCount = 0;
-        PlayerPrefs.SetFloat("moneyCount", moneyCount);
-        moneyTx.text = "$" + moneyCount;
-        Debug.Log("Money: " + moneyCount);
     }
 
     public void MergePipes()
@@ -437,7 +470,74 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
+
+    private void SetUIs()
+    {
+        incomeLevel = PlayerPrefs.GetInt("incomeLevel", 1);
+        incomeButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(incomeLevel);
+
+        incomeCost =  PlayerPrefs.GetFloat("incomeCost", 1);
+        incomeButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(incomeCost);
+        //----------------------------------------------
+        speedLevel = PlayerPrefs.GetInt("speedLevel", 1);
+        speedButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(speedLevel);
+
+        speedCost = PlayerPrefs.GetFloat("speedCost", 1);
+        speedButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(speedCost);
+
+        float speed = 1 + addSpeedAmount * speedLevel;
+        for (int i = 0; i < pipes.childCount; i++)
+        {
+            pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(speed);
+        }
+
+        moneyPerCoin = 1 + incomeLevel * incomeMultiplier;
+
+        CheckUIs();
+    }
+
+    private void CheckUIs()
+    {
+        incomeButton.GetComponent<Button>().interactable = moneyCount > incomeCost;
+        speedButton.GetComponent<Button>().interactable = moneyCount > speedCost;
+    }
+    public void ResetCosts()
+    {
+        speedLevel = 1;
+        PlayerPrefs.SetInt("speedLevel", speedLevel);
+        speedButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(speedLevel);
+
+        speedCost = 1;
+        PlayerPrefs.SetFloat("speedCost", speedCost);
+        speedButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(speedCost);
+
+        //----------------
+
+        incomeLevel = 1;
+        PlayerPrefs.SetInt("incomeLevel", incomeLevel);
+        incomeButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(incomeLevel);
+
+        incomeCost = 1;
+        PlayerPrefs.SetFloat("incomeCost", incomeCost);
+        incomeButton.transform.Find("CostTx").GetComponent<Text>().text = "$" + ConvertNumberToUIText(incomeCost);
+
+        float speed = 1 + addSpeedAmount * speedLevel;
+        for (int i = 0; i < pipes.childCount; i++)
+        {
+            pipes.GetChild(i).GetComponent<PipeController>().IncreseSpeed(speed);
+        }
+
+        moneyPerCoin = 1 + incomeLevel * incomeMultiplier;
+    }
+
+    public void ResetMoney()
+    {
+        moneyCount = 0;
+        PlayerPrefs.SetFloat("moneyCount", moneyCount);
+        moneyTx.text = "$" + moneyCount;
+        Debug.Log("Money: " + moneyCount);
+    }
+
     // Reload the current scene to restart the game
     public void Restart()
     {
