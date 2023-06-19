@@ -6100,6 +6100,7 @@ MonoBehaviour:
   speedButton: {fileID: 1148659625}
   pipeButton: {fileID: 2067563366}
   incomeButton: {fileID: 919865695}
+  buffParticle: {fileID: 138478, guid: ca22a39cb3cd5934eb44c379371b2cbb, type: 3}
   moneyPerCoin: 1
   heatSensivity: 0.3
   addSpeedAmount: 0.01

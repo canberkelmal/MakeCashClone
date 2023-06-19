@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public GameObject speedButton;
     public GameObject pipeButton;
     public GameObject incomeButton;
+    public GameObject buffParticle;
     public float moneyPerCoin = 1f;
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Money: " + moneyCount);
         CheckUIs();
     }
-    public void DeccreaseMoneyCount(float amount)
+    public void DecreaseMoneyCount(float amount)
     {
         moneyCount -= amount;
         PlayerPrefs.SetFloat("moneyCount", moneyCount);
@@ -221,7 +222,8 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseSpeed(bool sign)
     {
-        DeccreaseMoneyCount(speedCost);
+        Destroy(Instantiate(buffParticle, cardObj.transform.position - Vector3.forward, Quaternion.identity), 1.5f);
+        DecreaseMoneyCount(speedCost);
         speedLevel++;
         PlayerPrefs.SetInt("speedLevel", speedLevel);
         speedButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(speedLevel);
@@ -246,7 +248,8 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseIncome()
     {
-        DeccreaseMoneyCount(incomeCost);
+        Destroy(Instantiate(buffParticle, cardObj.transform.position - Vector3.forward, Quaternion.identity), 1.5f);
+        DecreaseMoneyCount(incomeCost);
         incomeLevel++;
         PlayerPrefs.SetInt("incomeLevel", incomeLevel);
         incomeButton.transform.Find("LevelTx").GetComponent<Text>().text = "Level " + ConvertNumberToUIText(incomeLevel);
