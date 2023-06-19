@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject mergePipeButton;
     public GameObject incomeButton;
     public GameObject buffParticle;
+    public GameObject addPipeParticle;
     public float moneyPerCoin = 1f;
     public float heatSensivity;
     public float addSpeedAmount = 0.1f;
@@ -257,6 +258,7 @@ public class GameManager : MonoBehaviour
 
         GameObject addedPipe = Instantiate(pipePrefab, pipes);
         addedPipe.transform.localPosition = Vector3.right * (pipes.childCount-1);
+        Instantiate(addPipeParticle, addedPipe.transform.position - Vector3.forward, Quaternion.Euler(-90, 0, 0));        
         AddRemoveToPipesArray(true, addedPipe);
 
         CheckUIs();

@@ -6102,6 +6102,7 @@ MonoBehaviour:
   mergePipeButton: {fileID: 848824688}
   incomeButton: {fileID: 919865695}
   buffParticle: {fileID: 138478, guid: ca22a39cb3cd5934eb44c379371b2cbb, type: 3}
+  addPipeParticle: {fileID: 101470, guid: cf92a1fe287dea2408d8eaac7ac27c2f, type: 3}
   moneyPerCoin: 1
   heatSensivity: 0.3
   addSpeedAmount: 0.01
