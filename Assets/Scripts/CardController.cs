@@ -15,10 +15,12 @@ public class CardController : MonoBehaviour
     private float fanSpeed = 1f;
     private bool isSmoked = false;
     private bool isFired = false;
+    private GameManager gameManager;
 
     // Start is called before the first frame update
     void Awake()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         fanSpeed = defaultFanSpeed;
     }
 
@@ -70,7 +72,7 @@ public class CardController : MonoBehaviour
 
         for (int i = 0; i < heatMateraials.Length; i++)
         {
-            heatMateraials[i].color = Color.Lerp(heatDefColors[i], Color.red, heatAmount);
+            heatMateraials[i].color = Color.Lerp(heatDefColors[i], gameManager.heatCardColor, heatAmount);
         }
     }
 }

@@ -3502,7 +3502,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $0
+  m_Text: $200
 --- !u!222 &1034831780
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6093,12 +6093,13 @@ MonoBehaviour:
   curvedPipePrefab: {fileID: 7251015594301408424, guid: 36f568f6fe3520542a38c7d883520751,
     type: 3}
   SettingsPanel: {fileID: 1700152027}
-  heatCardColor: {r: 1, g: 0, b: 0, a: 1}
+  heatCardColor: {r: 0.5849056, g: 0, b: 0, a: 1}
   pipes: {fileID: 6440147245006436432}
   heatBarFill: {fileID: 3120546060721012281}
   moneyTx: {fileID: 592444329}
   speedButton: {fileID: 1148659625}
   pipeButton: {fileID: 2067563366}
+  mergePipeButton: {fileID: 848824688}
   incomeButton: {fileID: 919865695}
   buffParticle: {fileID: 138478, guid: ca22a39cb3cd5934eb44c379371b2cbb, type: 3}
   moneyPerCoin: 1
@@ -6107,7 +6108,9 @@ MonoBehaviour:
   speedCost: 0.1
   incomeMultiplier: 1.1
   incomeCost: 0.1
+  pipeCost: 0.1
   costMultiplier: 1.15
+  pipeCostMultiplier: 1.7
   mergeAnimSensivity: 3
   pipeCount: 0
   pipeLevelColors:

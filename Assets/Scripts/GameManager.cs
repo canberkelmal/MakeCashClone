@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public Text moneyTx;
     public GameObject speedButton;
     public GameObject pipeButton;
+    public GameObject mergePipeButton;
     public GameObject incomeButton;
     public GameObject buffParticle;
     public float moneyPerCoin = 1f;
@@ -305,14 +306,16 @@ public class GameManager : MonoBehaviour
     {
         if (mergeable)
         {
+            mergeable = false;
             mergedPipe = mergeablePipesArray[1].gameObject;
 
             // Check if the curved pipe is merged
             isCurvedMerged = mergeablePipesArray[0].GetComponent<PipeController>().isCurved ? true : false;
             areMergedDeleted = false;
-
             InvokeRepeating("MergePipesLoop", 0, Time.fixedDeltaTime);
         }
+
+        CheckUIs();
     }
     public void MergePipesLoop()
     {
@@ -458,6 +461,8 @@ public class GameManager : MonoBehaviour
             }
         }
         mergeable = sameMultiplierCount > 2 ? true : false;
+
+        CheckUIs();
     }
 
     private void AddRemoveToMergeableArray(bool add, GameObject pipe)
@@ -530,6 +535,8 @@ public class GameManager : MonoBehaviour
         incomeButton.GetComponent<Button>().interactable = moneyCount > incomeCost;
         speedButton.GetComponent<Button>().interactable = moneyCount > speedCost;
         pipeButton.GetComponent<Button>().interactable = moneyCount > pipeCost;
+        mergePipeButton.GetComponent<Button>().interactable = moneyCount > pipeCost && mergeable;
+        mergePipeButton.transform.Find("Cost").GetComponent<Text>().text = "$" + ConvertNumberToUIText(pipeCost);
     }
     public void ResetCosts()
     {
