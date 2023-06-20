@@ -35,7 +35,7 @@ public class PipeController : MonoBehaviour
 
     public void InstantiateCoin()
     {
-        Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 0));
+        Destroy(Instantiate(coinObj, transform.Find("Mouth").position, Quaternion.Euler(90, 0, 180)), 10f);
         if(isCurved)
         {
             gameManager.moneyTx.transform.parent.GetComponent<Animator>().SetTrigger("Trig");
