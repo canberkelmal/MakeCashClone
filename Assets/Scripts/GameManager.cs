@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour
         if (heatBarFill.fillAmount < 1)
         {
             heatBarFill.fillAmount += heatSensivity * Time.deltaTime;
+            heatBarFill.color = Color.Lerp(Color.green, Color.red, heatBarFill.fillAmount);
         }
         else
         {
@@ -209,6 +210,7 @@ public class GameManager : MonoBehaviour
         if (heatBarFill.fillAmount > 0)
         {
             heatBarFill.fillAmount -= 2 * heatSensivity * Time.deltaTime;
+            heatBarFill.color = Color.Lerp(Color.green, Color.red, heatBarFill.fillAmount);
         }
         else
         {
@@ -307,6 +309,7 @@ public class GameManager : MonoBehaviour
 
     public void MergePipes()
     {
+        DecreaseMoneyCount(pipeCost);
         if (mergeable)
         {
             mergeable = false;
